@@ -69,12 +69,16 @@ This bundles `src/content/` into `dist/extract.js` (esbuild). Run it after chang
 
 ## Changelog
 
-### v1.0.1 — 2026-07-12
+### v1.0.2 — 2026-07-12
+
+#### Added
+
+- Synthetic test suite for the extraction pipeline (`npm test`)
 
 #### Fixed
 
-- Sidebar content (rankings etc.) could be clipped instead of the article body on pages like Yahoo! News; extraction is now scoped to the page's single `<article>` element when one exists
-- Navigation cards (rankings, related articles) are no longer treated as article images
+- Images inside a real `<figure>` whose link and caption are wrapped in an `<a>` (e.g. asahi.com) were dropped; they are now kept with their captions
+- Ad markers like `[PR]` no longer appear in the clip
 
 See [CHANGELOG.md](CHANGELOG.md) for full history.
 
@@ -155,12 +159,16 @@ npm run build
 
 ## 更新履歴
 
-### v1.0.1 — 2026-07-12
+### v1.0.2 — 2026-07-12
+
+#### 追加
+
+- 抽出パイプラインのテストスイート（`npm test`）
 
 #### 修正
 
-- Yahoo!ニュースなどで本文の代わりにサイドバー（ランキング等）がクリップされることがある問題を修正。ページ内に `<article>` 要素が1つだけある場合、抽出対象をそこに限定するように
-- ナビゲーションカード（ランキング・関連記事）を記事画像として扱わないように
+- 本物の `<figure>` 内で画像とキャプションが `<a>` に包まれているサイト（朝日新聞など）で画像が消えていた問題を修正。キャプションごと保持するように
+- `[PR]` などの広告マーカーがクリップに混入しないように
 
 全履歴は [CHANGELOG.md](CHANGELOG.md) を参照。
 

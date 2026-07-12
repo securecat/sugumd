@@ -10,6 +10,7 @@ export function prepareDom(doc, baseUrl) {
   isolateSingleArticle(doc);
   stripMisleadingClassTokens(doc);
   removePromoLinks(doc);
+  removeAdMarkers(doc);
   prepareImages(doc, baseUrl);
   rescueLinkedImages(doc, baseUrl);
 }
@@ -47,6 +48,17 @@ function removePromoLinks(doc) {
   }
 }
 
+// Ad markers like [PR] survive Readability (its ad-word list doesn't know
+// them) and end up as stray paragraphs at the top of the clip.
+const AD_MARKER_TEXT = /^(\[?(PR|AD)\]?|広告|スポンサーリンク)$/i;
+
+function removeAdMarkers(doc) {
+  for (const el of doc.querySelectorAll("p, div, span")) {
+    if (el.querySelector("img")) continue;
+    if (AD_MARKER_TEXT.test((el.textContent || "").trim())) el.remove();
+  }
+}
+
 // Utility classes like "overflow-x-hidden" (Tailwind and friends) match
 // Readability's negative "hidden" heuristic and get the whole element
 // removed even though nothing is visually hidden. Drop just those tokens;
@@ -75,18 +87,21 @@ function rescueLinkedImages(doc, baseUrl) {
   for (const anchor of doc.querySelectorAll("a")) {
     const imgs = anchor.querySelectorAll("img");
     if (imgs.length !== 1) continue;
-    if (!isSelfOrImageLink(anchor.getAttribute("href"), baseUrl)) continue;
     const text = (anchor.textContent || "").replace(/\s+/g, " ").trim();
     if (text.length > CAPTION_MAX_LENGTH) continue;
 
-    const img = imgs[0];
     if (anchor.closest("figure")) {
-      // Already inside a real figure; just unwrap the link.
-      anchor.replaceWith(img);
+      // Inside a real <figure> the site itself declares this an article
+      // figure, so the link (photo viewer, lightbox — wherever it goes)
+      // can be unwrapped unconditionally. Keep all children: some sites
+      // (e.g. asahi.com) put the <figcaption> inside the anchor too.
+      anchor.replaceWith(...anchor.childNodes);
       continue;
     }
+    if (!isSelfOrImageLink(anchor.getAttribute("href"), baseUrl)) continue;
+
     const figure = doc.createElement("figure");
-    figure.appendChild(img);
+    figure.appendChild(imgs[0]);
     if (text) {
       const figcaption = doc.createElement("figcaption");
       figcaption.textContent = text;

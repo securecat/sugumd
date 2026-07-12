@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [1.0.2] - 2026-07-12
+
+### Added
+
+- Synthetic test suite for the extraction pipeline (`npm test`)
+
+### Fixed
+
+- Images inside a real `<figure>` whose link (and caption) are wrapped in an `<a>` — e.g. asahi.com — were dropped as "all-link" blocks; links inside `<figure>` are now unwrapped unconditionally, keeping the caption
+- Ad markers like `[PR]` no longer appear in the clip
+
 ## [1.0.1] - 2026-07-12
 
 ### Fixed
@@ -19,6 +30,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ---
 
 # 更新履歴
+
+## [1.0.2] - 2026-07-12
+
+### 追加
+
+- 抽出パイプラインのテストスイート（`npm test`）
+
+### 修正
+
+- 本物の `<figure>` 内で画像とキャプションが `<a>` に包まれているサイト（朝日新聞など）で、画像が「リンクだけのブロック」として削除されていた問題を修正。`<figure>` 内のリンクは無条件に展開し、キャプションも保持するように
+- `[PR]` などの広告マーカーがクリップに混入しないように
 
 ## [1.0.1] - 2026-07-12
 

@@ -2277,6 +2277,7 @@
     isolateSingleArticle(doc);
     stripMisleadingClassTokens(doc);
     removePromoLinks(doc);
+    removeAdMarkers(doc);
     prepareImages(doc, baseUrl);
     rescueLinkedImages(doc, baseUrl);
   }
@@ -2298,6 +2299,13 @@
       if (PROMO_LINK_TEXT.test((anchor.textContent || "").trim())) anchor.remove();
     }
   }
+  var AD_MARKER_TEXT = /^(\[?(PR|AD)\]?|広告|スポンサーリンク)$/i;
+  function removeAdMarkers(doc) {
+    for (const el of doc.querySelectorAll("p, div, span")) {
+      if (el.querySelector("img")) continue;
+      if (AD_MARKER_TEXT.test((el.textContent || "").trim())) el.remove();
+    }
+  }
   function stripMisleadingClassTokens(doc) {
     for (const el of doc.querySelectorAll("[class*='hidden' i]")) {
       const tokens = (el.getAttribute("class") || "").split(/\s+/);
@@ -2309,16 +2317,15 @@
     for (const anchor of doc.querySelectorAll("a")) {
       const imgs = anchor.querySelectorAll("img");
       if (imgs.length !== 1) continue;
-      if (!isSelfOrImageLink(anchor.getAttribute("href"), baseUrl)) continue;
       const text = (anchor.textContent || "").replace(/\s+/g, " ").trim();
       if (text.length > CAPTION_MAX_LENGTH) continue;
-      const img = imgs[0];
       if (anchor.closest("figure")) {
-        anchor.replaceWith(img);
+        anchor.replaceWith(...anchor.childNodes);
         continue;
       }
+      if (!isSelfOrImageLink(anchor.getAttribute("href"), baseUrl)) continue;
       const figure = doc.createElement("figure");
-      figure.appendChild(img);
+      figure.appendChild(imgs[0]);
       if (text) {
         const figcaption = doc.createElement("figcaption");
         figcaption.textContent = text;
