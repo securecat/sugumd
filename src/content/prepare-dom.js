@@ -45,8 +45,10 @@ const SHARE_HREF = new RegExp(
 );
 
 // Print/share toolbars and other interactive controls are meaningless in
-// a Markdown clip and pollute it (Readability keeps them when they sit
-// inside the content container).
+// a Markdown clip and pollute it. Still needed with Defuddle: its
+// selector-based cleanup catches many real-world share widgets, but not
+// print-excluded classes (notPrint etc.), bare <button>s, script-only
+// anchor controls, or all of these share endpoints.
 function removeUiChrome(doc) {
   for (const el of doc.querySelectorAll("[class]")) {
     const tokens = (el.getAttribute("class") || "").split(/\s+/);
@@ -81,9 +83,10 @@ function removeAndPruneUp(el) {
 }
 
 // Japanese news sites drop "see also" teaser links like 【写真】… /
-// 【動画】… into the middle of body paragraphs. They are pure navigation,
-// and their text raises the block's link density enough for Readability to
-// delete the whole block — lead paragraph and lead image included.
+// 【動画】… into the middle of body paragraphs. They are pure navigation.
+// Still needed with Defuddle: the engine keeps them as body text (with
+// Readability they were worse — their link density took the lead
+// paragraph and lead image down with them).
 const PROMO_LINK_TEXT = /^【(?:写真|画像|動画|図解|図表|グラフ|地図|一覧|関連)/;
 
 function removePromoLinks(doc) {

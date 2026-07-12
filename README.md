@@ -67,6 +67,15 @@ npm run build
 
 This bundles `src/content/` into `dist/extract.js` (esbuild). Run it after changing any content-script source.
 
+### DOM pre-cleaning kept alongside Defuddle
+
+Extraction uses [Defuddle](https://github.com/kepano/defuddle). A small pre-cleaning step ([src/content/prepare-dom.js](src/content/prepare-dom.js)) remains because the regression suite goes red without it:
+
+- **Linked-image rescue** — photos wrapped in photo-viewer links inside plain `<div>`s (e.g. Yahoo! News) are dropped by the engine unless converted to `<figure>` first; scoped to same-page/image-file links so navigation cards stay links
+- **Teaser-link removal** — 【写真】/【動画】-style "see also" links common on Japanese news sites are kept by the engine as body text
+- **UI-chrome removal** — print-excluded classes (`notPrint`, `d-print-none`, …), share endpoints (including recipient-less `mailto:?`), `<button>`s and script-only controls; the engine covers some real-world share widgets but not all of these
+- **Ad-marker removal** — `[PR]`-style markers (site-independent post-processing)
+
 ### Fixture capture (development only)
 
 Right-clicking the toolbar icon offers **デバッグ: DOMをHTML保存**, which downloads the rendered DOM of the current tab as `fixture_YYYY-MM-DD_<host>.html` for use as a regression-test fixture. This is a development feature (`src/background/debug-fixture.js`); remove its initialization and the `contextMenus` permission for store releases.
@@ -155,6 +164,15 @@ npm run build
 ```
 
 `src/content/` を `dist/extract.js` にバンドルします（esbuild）。content script のソースを変更したら実行してください。
+
+### Defuddle と併用しているDOM前処理
+
+本文抽出は [Defuddle](https://github.com/kepano/defuddle) を使用しています。以下の前処理（[src/content/prepare-dom.js](src/content/prepare-dom.js)）は、外すと回帰テストが赤になるため維持しています：
+
+- **リンク内画像の救出** — 素の `<div>` 構造で写真ページへのリンクに包まれた画像（Yahoo!ニュース等）はエンジンに削除されるため、先に `<figure>` へ変換。ナビカードを巻き込まないよう「同一ページ/画像ファイルへのリンク」に限定
+- **誘導リンク除去** — 日本のニュースサイトに多い「【写真】〜」「【動画】〜」型のリンクはエンジンが本文として残すため除去
+- **UIクローム除去** — 印刷除外クラス（`notPrint`・`d-print-none` 等）、シェアエンドポイント（宛先なし `mailto:?` を含む）、`<button>`、スクリプト専用コントロール。エンジンの内蔵セレクタは実サイトの多くをカバーするが全部ではない
+- **広告マーカー除去** — `[PR]` 等（サイト非依存の後処理）
 
 ### フィクスチャ保存（開発用）
 
