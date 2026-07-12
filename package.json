@@ -4,9 +4,12 @@
   "private": true,
   "type": "module",
   "description": "Chrome extension that saves the current page as a Markdown file with frontmatter",
+  "engines": {
+    "node": ">=20.19"
+  },
   "scripts": {
     "build": "esbuild src/content/index.js --bundle --format=iife --target=chrome110 --outfile=dist/extract.js",
-    "test": "node --test test/"
+    "test": "node --test"
   },
   "dependencies": {
     "defuddle": "^0.19.1",
@@ -15,6 +18,6 @@
   },
   "devDependencies": {
     "esbuild": "^0.25.0",
-    "linkedom": "^0.18.5"
+    "linkedom": "^0.18.13"
   }
 }

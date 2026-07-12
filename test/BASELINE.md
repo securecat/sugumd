@@ -20,7 +20,7 @@
 ### テスト環境の注記(同一コードパス原則の差異)
 
 - テスト用DOMは **linkedom**(jsdomから変更)。jsdomのセレクタエンジン(nwsapi)がDefuddleの使う `:not(:has(source))` 等を解釈できず、Defuddleがエラー→body全体を返すフォールバックに落ちて正しく評価できないため。Defuddleはlinkedom互換レイヤーを同梱しており、`defuddle/node` も使わず**拡張と同じcoreバンドル+linkedomのdocument**で `extract()` を呼んでいる(同一コードパス原則は維持)
-- linkedom は Node 20.19+ を要求する新しめの依存を持つため `0.18.5` に固定(このマシンは Node 20.17)
+- 開発環境は **Node 22**(linkedom 0.18.13 の依存が Node 20.19+ を要求するため。Node 20.17 で作業する場合は linkedom を 0.18.5 に下げる必要がある)
 
 ## Readability + site-specificパッチ構成(v1.0.3時点・2026-07-12)
 
