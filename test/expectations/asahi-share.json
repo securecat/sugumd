@@ -1,0 +1,19 @@
+{
+  "fixture": "fixture_2026-07-12_www.asahi.com_share.html",
+  "url": "https://www.asahi.com/articles/ASV7B7G4SV7BUSPT00QM.html",
+  "mustContain": [
+    "子どものSNS利用をめぐる問題が、世界的課題になっている",
+    "安全なネット環境作りと、子どもの知る権利や人間関係の尊重を、両立させる点にある"
+  ],
+  "mustNotContain": [
+    "印刷する",
+    "シェアする",
+    "mailto:?",
+    "[PR]"
+  ],
+  "meta": {
+    "title": "それはどのSNSの話？　子どもの利用めぐる会話で気をつけたいこと",
+    "published": "2026-07-12",
+    "language": "ja"
+  }
+}

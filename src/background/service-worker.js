@@ -50,12 +50,12 @@ async function clipTab(tabId) {
     return false;
   }
 
-  if (!extracted || !extracted.ok) {
-    console.warn("sugumd: extraction failed:", extracted && extracted.reason);
+  if (!extracted || extracted.error || !extracted.markdown) {
+    console.warn("sugumd: extraction failed:", extracted && extracted.error);
     return false;
   }
 
-  const filename = buildFilename(extracted.title, extracted.clipped);
+  const filename = buildFilename(extracted.meta.title, extracted.meta.clipped);
   let downloadId;
   try {
     downloadId = await chrome.downloads.download({

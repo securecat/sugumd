@@ -2105,14 +2105,14 @@
 
   // src/content/metadata.js
   var TRACKING_PARAMS = /^(fbclid|gclid|yclid|igshid)$/i;
-  function collectMetadata(doc, loc) {
+  function collectMetadata(doc, url) {
     const jsonLd = findArticleJsonLd(doc);
     return {
       ogTitle: metaContent(doc, 'meta[property="og:title"]'),
       published: findPublished(doc, jsonLd),
       author: findAuthor(doc, jsonLd),
       language: findLanguage(doc),
-      sourceUrl: cleanSourceUrl(loc.href)
+      sourceUrl: cleanSourceUrl(url)
     };
   }
   function metaContent(doc, selector) {
@@ -3208,32 +3208,26 @@ ${block}
   }
 
   // src/content/extract-page.js
-  function extractPage(doc, loc) {
+  function extract(doc, url) {
     try {
-      const meta = collectMetadata(doc, loc);
+      const pageMeta = collectMetadata(doc, url);
       const clone = doc.cloneNode(true);
-      prepareDom(clone, loc.href);
+      prepareDom(clone, url);
       const article = new import_readability.Readability(clone).parse();
       if (!article || !article.content || !article.content.trim()) {
-        return { ok: false, reason: "no-content" };
+        return { error: "no-content" };
       }
-      const title = firstNonEmpty(article.title, meta.ogTitle, doc.title) || "";
-      const author = firstNonEmpty(meta.author, article.byline);
-      const clipped = formatLocalDate(/* @__PURE__ */ new Date());
-      const markdown = buildMarkdown(
-        {
-          title,
-          sourceUrl: meta.sourceUrl,
-          author,
-          published: meta.published,
-          clipped,
-          language: meta.language
-        },
-        article.content
-      );
-      return { ok: true, markdown, title, clipped };
+      const meta = {
+        title: firstNonEmpty(article.title, pageMeta.ogTitle, doc.title) || "",
+        sourceUrl: pageMeta.sourceUrl,
+        author: firstNonEmpty(pageMeta.author, article.byline),
+        published: pageMeta.published,
+        clipped: formatLocalDate(/* @__PURE__ */ new Date()),
+        language: pageMeta.language
+      };
+      return { markdown: buildMarkdown(meta, article.content), meta };
     } catch (error) {
-      return { ok: false, reason: String(error && error.message || error) };
+      return { error: String(error && error.message || error) };
     }
   }
   function firstNonEmpty(...values) {
@@ -3244,5 +3238,5 @@ ${block}
   }
 
   // src/content/index.js
-  window.__sugumdExtract = () => extractPage(document, window.location);
+  window.__sugumdExtract = () => extract(document, window.location.href);
 })();
