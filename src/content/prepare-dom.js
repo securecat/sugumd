@@ -142,15 +142,7 @@ function rescueLinkedImages(doc, baseUrl) {
     if (imgs.length !== 1) continue;
     const text = (anchor.textContent || "").replace(/\s+/g, " ").trim();
     if (text.length > CAPTION_MAX_LENGTH) continue;
-
-    if (anchor.closest("figure")) {
-      // Inside a real <figure> the site itself declares this an article
-      // figure, so the link (photo viewer, lightbox — wherever it goes)
-      // can be unwrapped unconditionally. Keep all children: some sites
-      // (e.g. asahi.com) put the <figcaption> inside the anchor too.
-      anchor.replaceWith(...anchor.childNodes);
-      continue;
-    }
+    if (anchor.closest("figure")) continue;
     if (!isSelfOrImageLink(anchor.getAttribute("href"), baseUrl)) continue;
 
     const figure = doc.createElement("figure");

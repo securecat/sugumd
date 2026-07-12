@@ -8202,10 +8202,7 @@ ${a.join("\n")}
       if (imgs.length !== 1) continue;
       const text = (anchor.textContent || "").replace(/\s+/g, " ").trim();
       if (text.length > CAPTION_MAX_LENGTH) continue;
-      if (anchor.closest("figure")) {
-        anchor.replaceWith(...anchor.childNodes);
-        continue;
-      }
+      if (anchor.closest("figure")) continue;
       if (!isSelfOrImageLink(anchor.getAttribute("href"), baseUrl)) continue;
       const figure = doc.createElement("figure");
       figure.appendChild(imgs[0]);
