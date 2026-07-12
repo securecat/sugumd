@@ -8122,7 +8122,6 @@ ${a.join("\n")}
   var CAPTION_MAX_LENGTH = 80;
   function prepareDom(doc, baseUrl) {
     isolateSingleArticle(doc);
-    stripMisleadingClassTokens(doc);
     removeUiChrome(doc);
     removePromoLinks(doc);
     removeAdMarkers(doc);
@@ -8195,13 +8194,6 @@ ${a.join("\n")}
     for (const el of doc.querySelectorAll("p, div, span")) {
       if (el.querySelector("img")) continue;
       if (AD_MARKER_TEXT.test((el.textContent || "").trim())) el.remove();
-    }
-  }
-  function stripMisleadingClassTokens(doc) {
-    for (const el of doc.querySelectorAll("[class*='hidden' i]")) {
-      const tokens = (el.getAttribute("class") || "").split(/\s+/);
-      const kept = tokens.filter((t) => !(/overflow/i.test(t) && /hidden/i.test(t)));
-      if (kept.length !== tokens.length) el.setAttribute("class", kept.join(" "));
     }
   }
   function rescueLinkedImages(doc, baseUrl) {

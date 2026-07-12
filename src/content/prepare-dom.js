@@ -8,7 +8,6 @@ const CAPTION_MAX_LENGTH = 80;
 // that are actually part of the article.
 export function prepareDom(doc, baseUrl) {
   isolateSingleArticle(doc);
-  stripMisleadingClassTokens(doc);
   removeUiChrome(doc);
   removePromoLinks(doc);
   removeAdMarkers(doc);
@@ -122,18 +121,6 @@ function removeAdMarkers(doc) {
   for (const el of doc.querySelectorAll("p, div, span")) {
     if (el.querySelector("img")) continue;
     if (AD_MARKER_TEXT.test((el.textContent || "").trim())) el.remove();
-  }
-}
-
-// Utility classes like "overflow-x-hidden" (Tailwind and friends) match
-// Readability's negative "hidden" heuristic and get the whole element
-// removed even though nothing is visually hidden. Drop just those tokens;
-// genuine "hidden" / "is-hidden" classes keep their meaning.
-function stripMisleadingClassTokens(doc) {
-  for (const el of doc.querySelectorAll("[class*='hidden' i]")) {
-    const tokens = (el.getAttribute("class") || "").split(/\s+/);
-    const kept = tokens.filter((t) => !(/overflow/i.test(t) && /hidden/i.test(t)));
-    if (kept.length !== tokens.length) el.setAttribute("class", kept.join(" "));
   }
 }
 
