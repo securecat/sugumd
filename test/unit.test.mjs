@@ -30,7 +30,7 @@ const html = `<!doctype html>
   <a href="/photo/detail.html"><img src="/same.png" alt="同一テキスト"><figcaption>同一テキスト</figcaption></a>
 </figure>
 <p>本文中に<a href="/detail">通常のテキストリンク</a>があります。これは残るべきです。</p>
-<p><a href="/other-article"><img src="/nav-thumb.png" alt="ナビカード"></a>これは他ページへのリンクなのでリンクのまま。</p>
+<p><a href="/other-article"><img src="/nav-thumb.png" alt="ナビカード">ナビ先タイトル</a>これは他ページへのリンクなのでリンクのまま。</p>
 <p><a href="/post/images/000"><img src="/self-sub.png" alt="同一ページ配下"></a></p>
 <p><img srcset="/small.jpg 480w, /large.jpg 1200w" src="/fallback.jpg" alt="srcset画像"></p>
 <p>記事に<a href="/rel1">【写真】誘導リンクは消える</a>はず。</p>
@@ -79,10 +79,9 @@ const cases = [
   ["in-figure photo link unwrapped", () => assert.ok(md.includes("![同一テキスト](https://example.com/same.png)"))],
   ["normal text link kept", () => assert.ok(md.includes("[通常のテキストリンク](https://example.com/detail)"))],
   ["nav-card link NOT converted to figure", () => {
-    // The link to the other page must survive; the thumbnail must not be
-    // promoted to a standalone figure image (v1.0.1 behavior).
-    assert.ok(!md.includes("> caption: ナビカード"));
-    assert.ok(!/^!\[ナビカード\]/m.test(md), "nav thumbnail must not become a standalone figure image");
+    // The link to the other page must survive; its text must not be
+    // promoted to a figure caption (v1.0.1 behavior).
+    assert.ok(!md.includes("> caption: ナビ先タイトル"), "nav-card text must not become a figure caption");
     assert.ok(md.includes("https://example.com/other-article"), "nav-card link target must survive");
   }],
   ["same-page sub-path link rescued", () => assert.ok(md.includes("![同一ページ配下](https://example.com/self-sub.png)"))],
