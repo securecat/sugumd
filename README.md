@@ -96,10 +96,6 @@ Right-clicking the toolbar icon offers **デバッグ: DOMをHTML保存**, which
 
 See [CHANGELOG.md](CHANGELOG.md) for full history.
 
-## License
-
-[MIT](LICENSE)
-
 ---
 
 # すぐmd
@@ -199,7 +195,3 @@ npm run build
 - 抽出チューニング課題リスト `TUNING.md`
 
 全履歴は [CHANGELOG.md](CHANGELOG.md) を参照。
-
-## ライセンス
-
-[MIT](LICENSE)
