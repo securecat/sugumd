@@ -1,0 +1,24 @@
+{
+  "fixture": "fixture_2026-07-12_news.yahoo.co.jp_images.html",
+  "url": "https://news.yahoo.co.jp/articles/b6ced92a04bbf2035e96d1be35d06e46a9ca2a20",
+  "mustContain": [
+    "思いも寄らない結末だった",
+    "在りし日の姿をそう懐かしんだ",
+    "警察に提出したのだった",
+    "![",
+    "amd-img/20260712-00000002-yonnana-000",
+    "amd-img/20260712-00000002-yonnana-001",
+    "amd-img/20260712-00000002-yonnana-002",
+    "男性の位牌に手を合わせる妻"
+  ],
+  "mustNotContain": [
+    "アクセスランキング",
+    "リアクションされています",
+    "【写真】",
+    "mailto:?"
+  ],
+  "meta": {
+    "published": "2026-07-12",
+    "language": "ja"
+  }
+}

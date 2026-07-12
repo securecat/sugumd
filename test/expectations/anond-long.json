@@ -1,0 +1,17 @@
+{
+  "fixture": "fixture_2026-07-12_anond.hatelabo.jp_long.html",
+  "url": "https://anond.hatelabo.jp/20260626203802",
+  "mustContain": [
+    "定時で切り上げて帰りたい人には",
+    "腐らせずに済んだのはありがたい点です"
+  ],
+  "mustNotContain": [
+    "記事への反応",
+    "人気エントリ",
+    "注目エントリ",
+    "mailto:?"
+  ],
+  "meta": {
+    "language": "ja"
+  }
+}

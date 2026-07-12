@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [1.1.0] - 2026-07-13
+
+### Changed
+
+- Extraction engine replaced: Readability.js → [Defuddle](https://github.com/kepano/defuddle). Site-specific pre-cleaning is reduced to a documented minimum (see README); body extraction on Hatena anonymous diary improved
+- Titles now drop a trailing "separator + site name" suffix (e.g. `：朝日新聞`), driven by the extracted site metadata
+
+### Added
+
+- Fixture-based regression test suite (`npm test`): fixtures captured from the rendered DOM, one JSON of expectations per case
+- Development-only context menu on the toolbar icon to save the current tab's DOM as a test fixture (adds the `contextMenus` permission)
+- `TUNING.md`: running backlog of extraction tuning targets
+
 ## [1.0.3] - 2026-07-12
 
 ### Fixed
@@ -36,6 +49,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ---
 
 # 更新履歴
+
+## [1.1.0] - 2026-07-13
+
+### 変更
+
+- 抽出エンジンを Readability.js から [Defuddle](https://github.com/kepano/defuddle) に置き換え。サイト固有の前処理を必要最小限に削減（README参照）。はてな匿名ダイアリーの本文抽出が改善
+- タイトル末尾の「区切り文字+サイト名」サフィックス（例：`：朝日新聞`）を、抽出したサイト名メタデータに基づいて除去するように
+
+### 追加
+
+- フィクスチャベースの回帰テストスイート（`npm test`）：レンダリング後DOMから取得したフィクスチャ+ケースごとの期待値JSON
+- ツールバーアイコンの右クリックに、表示中タブのDOMをテストフィクスチャとして保存する開発用メニュー（`contextMenus` 権限を追加）
+- `TUNING.md`：抽出チューニング課題の随時更新リスト
 
 ## [1.0.3] - 2026-07-12
 

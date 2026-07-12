@@ -1,0 +1,22 @@
+{
+  "fixture": "fixture_2026-07-12_www.asahi.com_figures.html",
+  "url": "https://www.asahi.com/articles/ASV793J5VV79PIHB015M.html",
+  "mustContain": [
+    "テーブルのコンロの上で、すき焼き鍋が煮立っていた",
+    "重い十字架を背負うことになる",
+    "![",
+    "AS20260709004365",
+    "事件現場となった建物。現在は建て替えられている"
+  ],
+  "mustNotContain": [
+    "印刷する",
+    "シェアする",
+    "mailto:?",
+    "[PR]"
+  ],
+  "meta": {
+    "title": "憲法記念日の夜に起きた殺人事件　現場に居合わせた記者は定年を前に",
+    "published": "2026-07-12",
+    "language": "ja"
+  }
+}

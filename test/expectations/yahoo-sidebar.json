@@ -1,0 +1,21 @@
+{
+  "fixture": "fixture_2026-07-12_news.yahoo.co.jp_sidebar.html",
+  "url": "https://news.yahoo.co.jp/articles/c0c852c6766998c4e705dfa8de497bb7432786eb",
+  "mustContain": [
+    "五回コールドゲーム勝ちで四街道を12―0で退けた",
+    "2回戦残り11試合が予定されている",
+    "![",
+    "amd-img/20260712-00010005-chibatopi",
+    "千葉経大付に敗れて悔しがる八千代松陰ナイン"
+  ],
+  "mustNotContain": [
+    "アクセスランキング",
+    "リアクションされています",
+    "PayPay残高使えます",
+    "mailto:?"
+  ],
+  "meta": {
+    "published": "2026-07-12",
+    "language": "ja"
+  }
+}

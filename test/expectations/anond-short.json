@@ -1,0 +1,16 @@
+{
+  "fixture": "fixture_2026-07-12_anond.hatelabo.jp_short.html",
+  "url": "https://anond.hatelabo.jp/20260712123603",
+  "mustContain": [
+    "根のところが歪んでそうだ、と思った"
+  ],
+  "mustNotContain": [
+    "記事への反応",
+    "人気エントリ",
+    "注目エントリ",
+    "mailto:?"
+  ],
+  "meta": {
+    "language": "ja"
+  }
+}
