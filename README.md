@@ -82,11 +82,17 @@ Right-clicking the toolbar icon offers **デバッグ: DOMをHTML保存**, which
 
 ## Changelog
 
-### v1.0.3 — 2026-07-12
+### v1.1.0 — 2026-07-13
 
-#### Fixed
+#### Changed
 
-- Print/share toolbars (print buttons, share-by-mail `mailto:?` links with article-length URLs, X/Facebook/Hatena/LINE/Pocket share links) no longer appear in clips; contact `mailto:` links with a recipient are kept
+- Extraction engine replaced: Readability.js → [Defuddle](https://github.com/kepano/defuddle), with site-specific pre-cleaning reduced to a documented minimum
+- Titles now drop trailing "separator + site name" suffixes (e.g. `：朝日新聞`)
+
+#### Added
+
+- Fixture-based regression test suite (`npm test`) and a development-only fixture-capture context menu
+- `TUNING.md` backlog of extraction tuning targets
 
 See [CHANGELOG.md](CHANGELOG.md) for full history.
 
@@ -180,11 +186,17 @@ npm run build
 
 ## 更新履歴
 
-### v1.0.3 — 2026-07-12
+### v1.1.0 — 2026-07-13
 
-#### 修正
+#### 変更
 
-- 印刷・共有ツールバー（印刷ボタン、記事全文入りの巨大URLになる宛先なし `mailto:?` リンク、X/Facebook/はてブ/LINE/Pocket等のシェアリンク）がクリップに混入しないように。宛先ありの `mailto:` 連絡先リンクは維持
+- 抽出エンジンを Readability.js から [Defuddle](https://github.com/kepano/defuddle) に置き換え。サイト固有の前処理を必要最小限に削減
+- タイトル末尾の「区切り文字+サイト名」サフィックス（例：`：朝日新聞`）を除去するように
+
+#### 追加
+
+- フィクスチャベースの回帰テストスイート（`npm test`）と開発用フィクスチャ保存メニュー
+- 抽出チューニング課題リスト `TUNING.md`
 
 全履歴は [CHANGELOG.md](CHANGELOG.md) を参照。
 
