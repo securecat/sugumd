@@ -18,7 +18,7 @@
       "48": "icons/icon48.png"
     }
   },
-  "permissions": ["activeTab", "scripting", "downloads"],
+  "permissions": ["activeTab", "scripting", "downloads", "contextMenus"],
   "background": {
     "service_worker": "src/background/service-worker.js",
     "type": "module"

@@ -1,4 +1,8 @@
 import { buildFilename } from "../common/filename.js";
+import { toDataUrl } from "../common/data-url.js";
+import { initFixtureDebug } from "./debug-fixture.js";
+
+initFixtureDebug();
 
 // State is shown by the badge alone: shape (✓ / !) and color (green / red)
 // are both distinct, so the redundancy holds without swapping the icon.
@@ -55,7 +59,7 @@ async function clipTab(tabId) {
   let downloadId;
   try {
     downloadId = await chrome.downloads.download({
-      url: toDataUrl(extracted.markdown),
+      url: toDataUrl(extracted.markdown, "text/markdown"),
       filename,
       saveAs: false,
       conflictAction: "uniquify",
@@ -66,18 +70,6 @@ async function clipTab(tabId) {
   }
 
   return waitForDownload(downloadId);
-}
-
-// URL.createObjectURL is unavailable in MV3 service workers, so the
-// Markdown travels as a base64 data URL instead.
-function toDataUrl(markdown) {
-  const bytes = new TextEncoder().encode(markdown);
-  let binary = "";
-  const CHUNK = 0x8000;
-  for (let i = 0; i < bytes.length; i += CHUNK) {
-    binary += String.fromCharCode(...bytes.subarray(i, i + CHUNK));
-  }
-  return `data:text/markdown;charset=utf-8;base64,${btoa(binary)}`;
 }
 
 function waitForDownload(downloadId) {

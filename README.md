@@ -67,6 +67,10 @@ npm run build
 
 This bundles `src/content/` into `dist/extract.js` (esbuild). Run it after changing any content-script source.
 
+### Fixture capture (development only)
+
+Right-clicking the toolbar icon offers **デバッグ: DOMをHTML保存**, which downloads the rendered DOM of the current tab as `fixture_YYYY-MM-DD_<host>.html` for use as a regression-test fixture. This is a development feature (`src/background/debug-fixture.js`); remove its initialization and the `contextMenus` permission for store releases.
+
 ## Changelog
 
 ### v1.0.3 — 2026-07-12
@@ -151,6 +155,10 @@ npm run build
 ```
 
 `src/content/` を `dist/extract.js` にバンドルします（esbuild）。content script のソースを変更したら実行してください。
+
+### フィクスチャ保存（開発用）
+
+ツールバーアイコンの右クリックメニュー **デバッグ: DOMをHTML保存** で、表示中タブのレンダリング後DOMを `fixture_YYYY-MM-DD_<ホスト名>.html` としてダウンロードできます（回帰テストのフィクスチャ用）。開発用機能です（`src/background/debug-fixture.js`）。ストア公開時は初期化呼び出しと `contextMenus` 権限を外してください。
 
 ## 更新履歴
 
