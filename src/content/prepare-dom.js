@@ -125,17 +125,17 @@ function removeAdMarkers(doc) {
 }
 
 // News sites (e.g. Yahoo! News) wrap article photos in a link to a photo
-// page, caption included. Readability sees a block whose text is 100%
-// links and removes it. Replace such anchors with <figure><img>
-// (+ <figcaption> when the link text looks like a caption) — <figure> is
-// exempt from Readability's conditional cleanup, and the link itself is
-// worthless in a clip.
+// page, caption included, in plain <div>s. The extraction engine drops
+// such all-link blocks (verified: Defuddle also loses Yahoo's article
+// images without this). Replace those anchors with <figure><img>
+// (+ <figcaption> when the link text looks like a caption).
 //
-// Only anchors that point at an image file or back into the current page
-// (photo viewer, lightbox) are rescued. Navigation cards that link to
-// OTHER pages (rankings, related articles) must stay links: their high
-// link density is exactly what makes Readability discard those blocks,
-// and neutralizing it can get a sidebar picked as the article body.
+// Still needed with Defuddle. The isSelfOrImageLink guard is also kept:
+// it is not an engine workaround but the semantic scope of the feature —
+// only photo-viewer/lightbox links are article figures. Rescuing anchors
+// that lead to OTHER pages would promote navigation cards (rankings,
+// related-article thumbnails) into protected figures and shield them
+// from the engine's cleanup.
 function rescueLinkedImages(doc, baseUrl) {
   for (const anchor of doc.querySelectorAll("a")) {
     const imgs = anchor.querySelectorAll("img");

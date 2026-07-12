@@ -78,7 +78,13 @@ const cases = [
   }],
   ["in-figure photo link unwrapped", () => assert.ok(md.includes("![同一テキスト](https://example.com/same.png)"))],
   ["normal text link kept", () => assert.ok(md.includes("[通常のテキストリンク](https://example.com/detail)"))],
-  ["nav-card link NOT converted to figure", () => assert.ok(!md.includes("> caption: ナビカード"))],
+  ["nav-card link NOT converted to figure", () => {
+    // The link to the other page must survive; the thumbnail must not be
+    // promoted to a standalone figure image (v1.0.1 behavior).
+    assert.ok(!md.includes("> caption: ナビカード"));
+    assert.ok(!/^!\[ナビカード\]/m.test(md), "nav thumbnail must not become a standalone figure image");
+    assert.ok(md.includes("https://example.com/other-article"), "nav-card link target must survive");
+  }],
   ["same-page sub-path link rescued", () => assert.ok(md.includes("![同一ページ配下](https://example.com/self-sub.png)"))],
   ["srcset picks largest candidate", () => assert.ok(md.includes("(https://example.com/large.jpg)"))],
   ["【写真】promo link removed", () => assert.ok(!md.includes("誘導リンクは消える"))],
