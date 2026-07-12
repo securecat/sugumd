@@ -2,8 +2,8 @@
 // don't depend on any real site. Site regressions live in extract.test.js.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { JSDOM } from "jsdom";
-import { extract } from "../src/content/extract-page.js";
+import { parseHTML } from "linkedom";
+import { extract, stripSiteSuffix } from "../src/content/extract-page.js";
 import { buildFilename } from "../src/common/filename.js";
 
 const longText1 = "これは本文の段落です。十分な長さがないとReadabilityが本文として認識しないため、ある程度の文章量を確保しています。".repeat(8);
@@ -51,8 +51,8 @@ const html = `<!doctype html>
 </html>`;
 
 const url = "https://example.com/post?id=42&utm_source=news&fbclid=x";
-const dom = new JSDOM(html, { url });
-const result = extract(dom.window.document, url);
+const { document } = parseHTML(html);
+const result = extract(document, url);
 
 test("synthetic: extraction succeeds", () => {
   assert.equal(result.error, undefined);
@@ -93,6 +93,20 @@ const cases = [
   }],
 ];
 for (const [name, fn] of cases) test(`synthetic: ${name}`, fn);
+
+test("stripSiteSuffix: separator + site removed", () => {
+  assert.equal(stripSiteSuffix("記事タイトル：朝日新聞", "朝日新聞"), "記事タイトル");
+  assert.equal(stripSiteSuffix("Article Title | Example News", "Example News"), "Article Title");
+});
+test("stripSiteSuffix: no separator → kept as-is", () => {
+  assert.equal(stripSiteSuffix("私と朝日新聞", "朝日新聞"), "私と朝日新聞");
+});
+test("stripSiteSuffix: title equal to site → kept", () => {
+  assert.equal(stripSiteSuffix("朝日新聞", "朝日新聞"), "朝日新聞");
+});
+test("stripSiteSuffix: unrelated site → kept", () => {
+  assert.equal(stripSiteSuffix("記事タイトル（47NEWS）", "Yahoo!ニュース"), "記事タイトル（47NEWS）");
+});
 
 test("filename: forbidden chars to fullwidth", () => {
   assert.equal(

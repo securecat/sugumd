@@ -2,6 +2,28 @@
 
 フィクスチャ回帰テスト(`npm test`)の結果記録。エンジン移行の効果測定用。
 
+## Defuddle 移行後(2026-07-13)
+
+`defuddle` 0.19.1(coreバンドル)+ prepare-dom.js のパッチ群は移行時点では全部残置(削減はフェーズ④)。タイトルの「区切り文字+サイト名」サフィックス除去を追加(Defuddleの `site` メタデータ駆動・site-specificではない。Readabilityが内蔵していた同種処理の代替)。
+
+| ケース | Readability | Defuddle | 備考 |
+|---|---|---|---|
+| yahoo-images | ✅ | ✅ | |
+| yahoo-sidebar | ✅ | ✅ | |
+| asahi-figures | ✅ | ✅ | Defuddleのtitleは「：朝日新聞」付き → サフィックス除去で解消 |
+| asahi-share | ✅ | ✅ | 同上 |
+| anond-long | ❌ | ❌ | **本文はクリーンに取れるように改善**(Readability時代は取れていたが構造が乱れがちだった)。「記事への反応」(トラックバック)混入は残存 |
+| anond-short | ❌ | ❌ | 同上 |
+
+**計: フィクスチャ 4/6 pass、全体 33/35 pass**(Readability時代と同水準、退行なし。anondは中身が前進)
+
+### テスト環境の注記(同一コードパス原則の差異)
+
+- テスト用DOMは **linkedom**(jsdomから変更)。jsdomのセレクタエンジン(nwsapi)がDefuddleの使う `:not(:has(source))` 等を解釈できず、Defuddleがエラー→body全体を返すフォールバックに落ちて正しく評価できないため。Defuddleはlinkedom互換レイヤーを同梱しており、`defuddle/node` も使わず**拡張と同じcoreバンドル+linkedomのdocument**で `extract()` を呼んでいる(同一コードパス原則は維持)
+- linkedom は Node 20.19+ を要求する新しめの依存を持つため `0.18.5` に固定(このマシンは Node 20.17)
+
+## Readability + site-specificパッチ構成(v1.0.3時点・2026-07-12)
+
 ## Readability + site-specificパッチ構成(v1.0.3時点・2026-07-12)
 
 `@mozilla/readability` 0.6 + `prepare-dom.js` の前処理パッチ群(hiddenクラス誤爆対策・リンク内画像救出・figure内リンク展開・印刷/共有UI除去 ほか)。

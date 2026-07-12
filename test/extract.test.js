@@ -5,7 +5,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readdirSync, readFileSync } from "node:fs";
-import { JSDOM, VirtualConsole } from "jsdom";
+import { parseHTML } from "linkedom";
 import { extract } from "../src/content/extract-page.js";
 
 const expectationsDir = new URL("./expectations/", import.meta.url);
@@ -16,11 +16,9 @@ for (const file of readdirSync(expectationsDir).sort()) {
 
   test(file.replace(/\.json$/, ""), () => {
     const html = readFileSync(new URL(`./fixtures/${expectation.fixture}`, import.meta.url), "utf8");
-    // Silence jsdom's CSS-parse noise from real-world stylesheets.
-    const virtualConsole = new VirtualConsole();
-    const dom = new JSDOM(html, { url: expectation.url, virtualConsole });
+    const { document } = parseHTML(html);
 
-    const result = extract(dom.window.document, expectation.url);
+    const result = extract(document, expectation.url);
     assert.equal(result.error, undefined, `extract() failed: ${result.error}`);
 
     for (const needle of expectation.mustContain ?? []) {
