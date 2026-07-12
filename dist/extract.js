@@ -2276,10 +2276,54 @@
   function prepareDom(doc, baseUrl) {
     isolateSingleArticle(doc);
     stripMisleadingClassTokens(doc);
+    removeUiChrome(doc);
     removePromoLinks(doc);
     removeAdMarkers(doc);
     prepareImages(doc, baseUrl);
     rescueLinkedImages(doc, baseUrl);
+  }
+  var PRINT_HIDDEN_CLASS = /^(no-?print|not-?print|d-print-none|print-(none|hidden)|hidden-print)$/i;
+  var SHARE_HREF = new RegExp(
+    [
+      "^mailto:\\?",
+      "(?:twitter|x)\\.com/intent/",
+      "facebook\\.com/(?:sharer|share\\.php|dialog/(?:feed|share))",
+      "b\\.hatena\\.ne\\.jp/(?:add|entry/panel)",
+      "line\\.me/R/msg/",
+      "social-plugins\\.line\\.me/lineit/share",
+      "getpocket\\.com/(?:save|edit)",
+      "linkedin\\.com/(?:shareArticle|sharing/share-offsite)",
+      "pinterest\\.com/pin/create",
+      "reddit\\.com/submit",
+      "t\\.me/share",
+      "wa\\.me/\\?text=",
+      "api\\.whatsapp\\.com/send",
+      "weibo\\.com/share",
+      "news\\.ycombinator\\.com/submitlink"
+    ].join("|"),
+    "i"
+  );
+  function removeUiChrome(doc) {
+    for (const el of doc.querySelectorAll("[class]")) {
+      const tokens = (el.getAttribute("class") || "").split(/\s+/);
+      if (tokens.some((t) => PRINT_HIDDEN_CLASS.test(t))) removeAndPruneUp(el);
+    }
+    for (const anchor of doc.querySelectorAll("a")) {
+      const href = (anchor.getAttribute("href") || "").trim();
+      const scriptOnly = href.toLowerCase().startsWith("javascript:") || !href && anchor.getAttribute("role") === "button";
+      if (scriptOnly || href && SHARE_HREF.test(href)) removeAndPruneUp(anchor);
+    }
+    for (const button of doc.querySelectorAll("button")) removeAndPruneUp(button);
+  }
+  var PRUNABLE_TAGS = /* @__PURE__ */ new Set(["LI", "UL", "OL", "DIV", "P", "SPAN", "SECTION", "NAV"]);
+  function removeAndPruneUp(el) {
+    let parent = el.parentElement;
+    el.remove();
+    while (parent && PRUNABLE_TAGS.has(parent.nodeName) && !(parent.textContent || "").trim() && !parent.querySelector("img")) {
+      const next2 = parent.parentElement;
+      parent.remove();
+      parent = next2;
+    }
   }
   var ARTICLE_MIN_TEXT = 250;
   function isolateSingleArticle(doc) {

@@ -9,10 +9,76 @@ const CAPTION_MAX_LENGTH = 80;
 export function prepareDom(doc, baseUrl) {
   isolateSingleArticle(doc);
   stripMisleadingClassTokens(doc);
+  removeUiChrome(doc);
   removePromoLinks(doc);
   removeAdMarkers(doc);
   prepareImages(doc, baseUrl);
   rescueLinkedImages(doc, baseUrl);
+}
+
+// Class tokens that mean "exclude from print" — the site itself says this
+// is page chrome, not content (asahi.com "notPrint", Bootstrap
+// "d-print-none", etc.).
+const PRINT_HIDDEN_CLASS = /^(no-?print|not-?print|d-print-none|print-(none|hidden)|hidden-print)$/i;
+
+// Share endpoints. "mailto:?" (no recipient) is the share-by-mail form —
+// its subject/body parameters can embed the whole article as one giant
+// URL. Plain "mailto:someone@…" contact links are kept.
+const SHARE_HREF = new RegExp(
+  [
+    "^mailto:\\?",
+    "(?:twitter|x)\\.com/intent/",
+    "facebook\\.com/(?:sharer|share\\.php|dialog/(?:feed|share))",
+    "b\\.hatena\\.ne\\.jp/(?:add|entry/panel)",
+    "line\\.me/R/msg/",
+    "social-plugins\\.line\\.me/lineit/share",
+    "getpocket\\.com/(?:save|edit)",
+    "linkedin\\.com/(?:shareArticle|sharing/share-offsite)",
+    "pinterest\\.com/pin/create",
+    "reddit\\.com/submit",
+    "t\\.me/share",
+    "wa\\.me/\\?text=",
+    "api\\.whatsapp\\.com/send",
+    "weibo\\.com/share",
+    "news\\.ycombinator\\.com/submitlink",
+  ].join("|"),
+  "i"
+);
+
+// Print/share toolbars and other interactive controls are meaningless in
+// a Markdown clip and pollute it (Readability keeps them when they sit
+// inside the content container).
+function removeUiChrome(doc) {
+  for (const el of doc.querySelectorAll("[class]")) {
+    const tokens = (el.getAttribute("class") || "").split(/\s+/);
+    if (tokens.some((t) => PRINT_HIDDEN_CLASS.test(t))) removeAndPruneUp(el);
+  }
+  for (const anchor of doc.querySelectorAll("a")) {
+    const href = (anchor.getAttribute("href") || "").trim();
+    const scriptOnly = href.toLowerCase().startsWith("javascript:") ||
+      (!href && anchor.getAttribute("role") === "button");
+    if (scriptOnly || (href && SHARE_HREF.test(href))) removeAndPruneUp(anchor);
+  }
+  for (const button of doc.querySelectorAll("button")) removeAndPruneUp(button);
+}
+
+const PRUNABLE_TAGS = new Set(["LI", "UL", "OL", "DIV", "P", "SPAN", "SECTION", "NAV"]);
+
+// Remove an element, then climb and remove wrappers left with nothing in
+// them, so lists of share buttons don't leave empty bullet skeletons.
+function removeAndPruneUp(el) {
+  let parent = el.parentElement;
+  el.remove();
+  while (
+    parent &&
+    PRUNABLE_TAGS.has(parent.nodeName) &&
+    !(parent.textContent || "").trim() &&
+    !parent.querySelector("img")
+  ) {
+    const next = parent.parentElement;
+    parent.remove();
+    parent = next;
+  }
 }
 
 // Minimum amount of text (whitespace removed) for an <article> element to

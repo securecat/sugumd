@@ -69,16 +69,11 @@ This bundles `src/content/` into `dist/extract.js` (esbuild). Run it after chang
 
 ## Changelog
 
-### v1.0.2 — 2026-07-12
-
-#### Added
-
-- Synthetic test suite for the extraction pipeline (`npm test`)
+### v1.0.3 — 2026-07-12
 
 #### Fixed
 
-- Images inside a real `<figure>` whose link and caption are wrapped in an `<a>` (e.g. asahi.com) were dropped; they are now kept with their captions
-- Ad markers like `[PR]` no longer appear in the clip
+- Print/share toolbars (print buttons, share-by-mail `mailto:?` links with article-length URLs, X/Facebook/Hatena/LINE/Pocket share links) no longer appear in clips; contact `mailto:` links with a recipient are kept
 
 See [CHANGELOG.md](CHANGELOG.md) for full history.
 
@@ -159,16 +154,11 @@ npm run build
 
 ## 更新履歴
 
-### v1.0.2 — 2026-07-12
-
-#### 追加
-
-- 抽出パイプラインのテストスイート（`npm test`）
+### v1.0.3 — 2026-07-12
 
 #### 修正
 
-- 本物の `<figure>` 内で画像とキャプションが `<a>` に包まれているサイト（朝日新聞など）で画像が消えていた問題を修正。キャプションごと保持するように
-- `[PR]` などの広告マーカーがクリップに混入しないように
+- 印刷・共有ツールバー（印刷ボタン、記事全文入りの巨大URLになる宛先なし `mailto:?` リンク、X/Facebook/はてブ/LINE/Pocket等のシェアリンク）がクリップに混入しないように。宛先ありの `mailto:` 連絡先リンクは維持
 
 全履歴は [CHANGELOG.md](CHANGELOG.md) を参照。
 

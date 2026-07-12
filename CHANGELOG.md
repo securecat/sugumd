@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [1.0.3] - 2026-07-12
+
+### Fixed
+
+- Print/share toolbars no longer appear in clips: elements with print-excluded classes (`notPrint`, `no-print`, `d-print-none`, …), share links (share-by-mail `mailto:?` with article-length URLs, X/Facebook/Hatena/LINE/Pocket and other share endpoints), `<button>`s, and script-only controls are removed, along with the empty list skeletons they leave behind. Contact `mailto:` links with a recipient are kept
+
 ## [1.0.2] - 2026-07-12
 
 ### Added
@@ -30,6 +36,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ---
 
 # 更新履歴
+
+## [1.0.3] - 2026-07-12
+
+### 修正
+
+- 印刷・共有ツールバーがクリップに混入しないように：印刷除外クラス（`notPrint`・`no-print`・`d-print-none` 等）の要素、共有リンク（記事全文入りの巨大URLになる宛先なし `mailto:?`、X/Facebook/はてブ/LINE/Pocket等のシェアエンドポイント）、`<button>`、スクリプト専用コントロールを除去し、除去後に残る空のリスト骨格も掃除するように。宛先ありの `mailto:` 連絡先リンクは維持
 
 ## [1.0.2] - 2026-07-12
 
