@@ -8121,7 +8121,6 @@ ${a.join("\n")}
   // src/content/prepare-dom.js
   var CAPTION_MAX_LENGTH = 80;
   function prepareDom(doc, baseUrl) {
-    isolateSingleArticle(doc);
     removeUiChrome(doc);
     removePromoLinks(doc);
     removeAdMarkers(doc);
@@ -8170,17 +8169,6 @@ ${a.join("\n")}
       parent.remove();
       parent = next2;
     }
-  }
-  var ARTICLE_MIN_TEXT = 250;
-  function isolateSingleArticle(doc) {
-    const articles = doc.querySelectorAll("article");
-    if (articles.length !== 1) return;
-    const article = articles[0];
-    const textLength = (article.textContent || "").replace(/\s+/g, "").length;
-    if (textLength < ARTICLE_MIN_TEXT) return;
-    if (!doc.body || !doc.body.contains(article)) return;
-    doc.body.textContent = "";
-    doc.body.appendChild(article);
   }
   var PROMO_LINK_TEXT = /^【(?:写真|画像|動画|図解|図表|グラフ|地図|一覧|関連)/;
   function removePromoLinks(doc) {

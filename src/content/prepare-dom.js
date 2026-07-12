@@ -4,10 +4,10 @@ import { prepareImages } from "./resolve-image-url.js";
 // not a caption, and the anchor is left alone.
 const CAPTION_MAX_LENGTH = 80;
 
-// Pre-clean the cloned document so Readability doesn't throw away images
-// that are actually part of the article.
+// Pre-clean the cloned document so the extraction engine doesn't throw
+// away images that are actually part of the article, and so page chrome
+// the engine keeps doesn't leak into the clip.
 export function prepareDom(doc, baseUrl) {
-  isolateSingleArticle(doc);
   removeUiChrome(doc);
   removePromoLinks(doc);
   removeAdMarkers(doc);
@@ -78,26 +78,6 @@ function removeAndPruneUp(el) {
     parent.remove();
     parent = next;
   }
-}
-
-// Minimum amount of text (whitespace removed) for an <article> element to
-// be trusted as the page's main content.
-const ARTICLE_MIN_TEXT = 250;
-
-// Some sites (e.g. Yahoo! News) put rankings and other sidebar modules in
-// plain <div>s inside <main> — not <aside> — so Readability can't tell
-// them apart from the body, and on short articles the sidebar can win.
-// When the page has exactly one substantial <article>, semantic HTML
-// already tells us where the content is: reduce the document to it.
-function isolateSingleArticle(doc) {
-  const articles = doc.querySelectorAll("article");
-  if (articles.length !== 1) return;
-  const article = articles[0];
-  const textLength = (article.textContent || "").replace(/\s+/g, "").length;
-  if (textLength < ARTICLE_MIN_TEXT) return;
-  if (!doc.body || !doc.body.contains(article)) return;
-  doc.body.textContent = "";
-  doc.body.appendChild(article);
 }
 
 // Japanese news sites drop "see also" teaser links like 【写真】… /
