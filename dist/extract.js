@@ -2274,10 +2274,22 @@
   // src/content/prepare-dom.js
   var CAPTION_MAX_LENGTH = 80;
   function prepareDom(doc, baseUrl) {
+    isolateSingleArticle(doc);
     stripMisleadingClassTokens(doc);
     removePromoLinks(doc);
     prepareImages(doc, baseUrl);
-    rescueLinkedImages(doc);
+    rescueLinkedImages(doc, baseUrl);
+  }
+  var ARTICLE_MIN_TEXT = 250;
+  function isolateSingleArticle(doc) {
+    const articles = doc.querySelectorAll("article");
+    if (articles.length !== 1) return;
+    const article = articles[0];
+    const textLength = (article.textContent || "").replace(/\s+/g, "").length;
+    if (textLength < ARTICLE_MIN_TEXT) return;
+    if (!doc.body || !doc.body.contains(article)) return;
+    doc.body.textContent = "";
+    doc.body.appendChild(article);
   }
   var PROMO_LINK_TEXT = /^【(?:写真|画像|動画|図解|図表|グラフ|地図|一覧|関連)/;
   function removePromoLinks(doc) {
@@ -2293,10 +2305,11 @@
       if (kept.length !== tokens.length) el.setAttribute("class", kept.join(" "));
     }
   }
-  function rescueLinkedImages(doc) {
+  function rescueLinkedImages(doc, baseUrl) {
     for (const anchor of doc.querySelectorAll("a")) {
       const imgs = anchor.querySelectorAll("img");
       if (imgs.length !== 1) continue;
+      if (!isSelfOrImageLink(anchor.getAttribute("href"), baseUrl)) continue;
       const text = (anchor.textContent || "").replace(/\s+/g, " ").trim();
       if (text.length > CAPTION_MAX_LENGTH) continue;
       const img = imgs[0];
@@ -2313,6 +2326,21 @@
       }
       anchor.replaceWith(figure);
     }
+  }
+  function isSelfOrImageLink(href, baseUrl) {
+    if (!href || href.trim() === "" || href.trim() === "#") return true;
+    let target;
+    let page;
+    try {
+      target = new URL(href, baseUrl);
+      page = new URL(baseUrl);
+    } catch {
+      return false;
+    }
+    if (/\.(jpe?g|png|webp|gif|avif|svg)$/i.test(target.pathname)) return true;
+    const pagePath = page.origin + page.pathname.replace(/\/$/, "");
+    const targetPath = target.origin + target.pathname.replace(/\/$/, "");
+    return targetPath === pagePath || targetPath.startsWith(`${pagePath}/`);
   }
 
   // node_modules/turndown/lib/turndown.browser.es.js
