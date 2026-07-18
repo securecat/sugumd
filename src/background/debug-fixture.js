@@ -27,13 +27,16 @@ export function initFixtureDebug() {
 }
 
 export async function saveFixture(tabId) {
+  // Inject the extraction bundle first so the fixture is taken from the
+  // same document extraction would use (content frame on frame-based
+  // pages, not the empty wrapper).
+  await chrome.scripting.executeScript({
+    target: { tabId },
+    files: ["dist/extract.js"],
+  });
   const [{ result }] = await chrome.scripting.executeScript({
     target: { tabId },
-    func: () => ({
-      html: document.documentElement.outerHTML,
-      url: location.href,
-      host: location.hostname,
-    }),
+    func: () => window.__sugumdFixtureSource(),
   });
   if (!result) return false;
 

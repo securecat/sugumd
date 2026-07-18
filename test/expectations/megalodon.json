@@ -1,0 +1,16 @@
+{
+  "fixture": "fixture_2026-07-18_megalodon.jp.html",
+  "url": "https://megalodon.jp/ref/2026-0717-1749-38/https://anond.hatelabo.jp:443/20260717162049",
+  "mustContain": [
+    "帰ってきたらいきなり消されてたので何事かと思ったら",
+    "イビキがとにかくすごい"
+  ],
+  "mustNotContain": [
+    "ウェブ魚拓からお知らせ",
+    "urlの先頭にgyo.tc/を付けてみよう"
+  ],
+  "meta": {
+    "title": "【再掲】エリートだった兄が精神やられて完全に崩壊して3年になる",
+    "language": "ja"
+  }
+}

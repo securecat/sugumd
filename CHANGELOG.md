@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [1.2.0] - 2026-07-18
+
+### Added
+
+- Frame-based pages: when a same-origin frame/iframe dominates the viewport and holds the actual content (e.g. web archive viewers like megalodon.jp), extraction targets that frame's document. The frontmatter `source_url` stays the top page URL, and the fixture-capture debug menu saves the same document extraction would use
+
 ## [1.1.0] - 2026-07-13
 
 ### Changed
@@ -49,6 +55,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ---
 
 # 更新履歴
+
+## [1.2.0] - 2026-07-18
+
+### 追加
+
+- フレーム構造のページに対応：同一オリジンのフレーム/iframeがビューポートの大部分を占めて実コンテンツを持つ場合（megalodon.jp のようなウェブ魚拓ビューア等）、そのフレームのドキュメントを抽出対象に。frontmatter の `source_url` は親ページのURLを維持し、フィクスチャ保存デバッグメニューも抽出と同じドキュメントを保存するように
 
 ## [1.1.0] - 2026-07-13
 

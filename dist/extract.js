@@ -7952,14 +7952,14 @@ ${a.join("\n")}
 
   // src/content/metadata.js
   var TRACKING_PARAMS = /^(fbclid|gclid|yclid|igshid)$/i;
-  function collectMetadata(doc, url) {
+  function collectMetadata(doc, url, sourceUrl = url) {
     const jsonLd = findArticleJsonLd(doc);
     return {
       ogTitle: metaContent(doc, 'meta[property="og:title"]'),
       published: findPublished(doc, jsonLd),
       author: findAuthor(doc, jsonLd),
       language: findLanguage(doc),
-      sourceUrl: cleanSourceUrl(url)
+      sourceUrl: cleanSourceUrl(sourceUrl)
     };
   }
   function metaContent(doc, selector) {
@@ -9032,9 +9032,9 @@ ${block}
   }
 
   // src/content/extract-page.js
-  function extract(doc, url) {
+  function extract(doc, url, sourceUrl = url) {
     try {
-      const pageMeta = collectMetadata(doc, url);
+      const pageMeta = collectMetadata(doc, url, sourceUrl);
       const clone = doc.cloneNode(true);
       prepareDom(clone, url);
       const article = new import_defuddle.default(clone, { url }).parse();
@@ -9075,6 +9075,60 @@ ${block}
     return stripped || title;
   }
 
+  // src/content/pick-document.js
+  var MIN_FRAME_TEXT = 400;
+  var MIN_SIZE_RATIO = 0.7;
+  function pickContentDocument(win) {
+    const viewportW = win.innerWidth || 0;
+    const viewportH = win.innerHeight || 0;
+    let best = null;
+    for (const frameEl of win.document.querySelectorAll("frame, iframe")) {
+      let doc;
+      try {
+        doc = frameEl.contentDocument;
+      } catch {
+        continue;
+      }
+      if (!doc || !doc.body) continue;
+      const rect = frameEl.getBoundingClientRect();
+      if (viewportW && rect.width < viewportW * MIN_SIZE_RATIO) continue;
+      if (viewportH && rect.height < viewportH * MIN_SIZE_RATIO) continue;
+      const length = textLength(doc.body);
+      if (length < MIN_FRAME_TEXT) continue;
+      if (!best || length > best.length) {
+        let url;
+        try {
+          url = frameEl.contentWindow.location.href;
+        } catch {
+          continue;
+        }
+        best = { doc, url, length };
+      }
+    }
+    if (best) {
+      return { doc: best.doc, url: best.url, sourceUrl: win.location.href };
+    }
+    return {
+      doc: win.document,
+      url: win.location.href,
+      sourceUrl: win.location.href
+    };
+  }
+  function textLength(el) {
+    return (el && el.textContent || "").replace(/\s+/g, "").length;
+  }
+
   // src/content/index.js
-  window.__sugumdExtract = () => extract(document, window.location.href);
+  window.__sugumdExtract = () => {
+    const target = pickContentDocument(window);
+    return extract(target.doc, target.url, target.sourceUrl);
+  };
+  window.__sugumdFixtureSource = () => {
+    const target = pickContentDocument(window);
+    return {
+      html: target.doc.documentElement.outerHTML,
+      url: target.url,
+      host: window.location.hostname
+    };
+  };
 })();
