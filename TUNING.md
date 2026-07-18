@@ -2,7 +2,7 @@
 
 日常のクリップで気づいた抽出品質の課題を記録する作業メモ（随時更新）。
 
-対応するときの流れ：対象ページのフィクスチャをデバッグメニュー（アイコン右クリック → デバッグ: DOMをHTML保存）で取得 → `test/fixtures/` に置き、期待値JSONを `test/expectations/` に1つ追加 → 赤を確認してから修正（詳細は README の開発セクションと `test/extract.test.js`）。
+対応するときの流れ：対象ページのフィクスチャをデバッグメニュー（アイコン右クリック → デバッグ: DOMをHTML保存）で取得 → `test/fixtures/` に置き、期待値JSONを `test/expectations/` に1つ追加 → 赤を確認してから修正。**期待値JSONの書き方は [test/README.md](test/README.md) を参照**。
 
 ---
 
