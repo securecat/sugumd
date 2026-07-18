@@ -22,9 +22,9 @@
 - テスト用DOMは **linkedom**(jsdomから変更)。jsdomのセレクタエンジン(nwsapi)がDefuddleの使う `:not(:has(source))` 等を解釈できず、Defuddleがエラー→body全体を返すフォールバックに落ちて正しく評価できないため。Defuddleはlinkedom互換レイヤーを同梱しており、`defuddle/node` も使わず**拡張と同じcoreバンドル+linkedomのdocument**で `extract()` を呼んでいる(同一コードパス原則は維持)
 - 開発環境は **Node 22**(linkedom 0.18.13 の依存が Node 20.19+ を要求するため。Node 20.17 で作業する場合は linkedom を 0.18.5 に下げる必要がある)
 
-## Readability + site-specificパッチ構成(v1.0.3時点・2026-07-12)
+## Readability + site-specificパッチ構成(v0.0.3時点・2026-07-12)
 
-## Readability + site-specificパッチ構成(v1.0.3時点・2026-07-12)
+## Readability + site-specificパッチ構成(v0.0.3時点・2026-07-12)
 
 `@mozilla/readability` 0.6 + `prepare-dom.js` の前処理パッチ群(hiddenクラス誤爆対策・リンク内画像救出・figure内リンク展開・印刷/共有UI除去 ほか)。
 

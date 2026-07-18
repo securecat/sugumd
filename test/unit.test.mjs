@@ -80,7 +80,7 @@ const cases = [
   ["normal text link kept", () => assert.ok(md.includes("[通常のテキストリンク](https://example.com/detail)"))],
   ["nav-card link NOT converted to figure", () => {
     // The link to the other page must survive; its text must not be
-    // promoted to a figure caption (v1.0.1 behavior).
+    // promoted to a figure caption (v0.0.1 behavior).
     assert.ok(!md.includes("> caption: ナビ先タイトル"), "nav-card text must not become a figure caption");
     assert.ok(md.includes("https://example.com/other-article"), "nav-card link target must survive");
   }],

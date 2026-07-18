@@ -83,11 +83,11 @@ Right-clicking the toolbar icon offers **デバッグ: DOMをHTML保存**, which
 
 ## Changelog
 
-### v1.2.0 — 2026-07-18
+### v0.2.1 — 2026-07-18
 
-#### Added
+#### Changed
 
-- Frame-based pages: extraction now targets the content frame on pages like web archive viewers (megalodon.jp), keeping the top page URL as `source_url`
+- Renumbered every release to major version 0 (former 1.0.0–1.2.0 are now 0.0.0–0.2.0); the road to a true initial release still looks long
 
 See [CHANGELOG.md](CHANGELOG.md) for full history.
 
@@ -178,10 +178,10 @@ npm run build
 
 ## 更新履歴
 
-### v1.2.0 — 2026-07-18
+### v0.2.1 — 2026-07-18
 
-#### 追加
+#### 変更
 
-- フレーム構造のページに対応：ウェブ魚拓ビューア（megalodon.jp）のようなページで、コンテンツの入ったフレームを抽出対象に。`source_url` は親ページのURLを維持
+- 真の初回リリースまでの道のりはまだ長そうだということで、MAJORバージョンを0に落として仕切り直し（旧 1.0.0〜1.2.0 は 0.0.0〜0.2.0 に）
 
 全履歴は [CHANGELOG.md](CHANGELOG.md) を参照。

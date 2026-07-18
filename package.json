@@ -1,6 +1,6 @@
 {
   "name": "sugumd",
-  "version": "1.2.0",
+  "version": "0.2.1",
   "private": true,
   "type": "module",
   "description": "Chrome extension that saves the current page as a Markdown file with frontmatter",
