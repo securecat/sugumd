@@ -5,11 +5,15 @@ import { buildMarkdown } from "./to-markdown.js";
 import { formatLocalDate, normalizeDate } from "./dates.js";
 
 // Pure extraction pipeline: same code path for the extension (injected
-// into the live page) and for Node-based regression tests (jsdom).
+// into the live page) and for Node-based regression tests (linkedom).
 // Returns { markdown, meta } on success or { error } on failure.
-export function extract(doc, url) {
+//
+// url is the document's own URL (base for resolving relative URLs).
+// sourceUrl is what goes into the frontmatter; it differs from url only
+// when extracting from a frame document (then it is the top page URL).
+export function extract(doc, url, sourceUrl = url) {
   try {
-    const pageMeta = collectMetadata(doc, url);
+    const pageMeta = collectMetadata(doc, url, sourceUrl);
     // Defuddle's parse() works on (and mutates) the document it is given,
     // so hand it a clone — never the live page.
     const clone = doc.cloneNode(true);

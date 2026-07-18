@@ -2,14 +2,14 @@ import { normalizeDate } from "./dates.js";
 
 const TRACKING_PARAMS = /^(fbclid|gclid|yclid|igshid)$/i;
 
-export function collectMetadata(doc, url) {
+export function collectMetadata(doc, url, sourceUrl = url) {
   const jsonLd = findArticleJsonLd(doc);
   return {
     ogTitle: metaContent(doc, 'meta[property="og:title"]'),
     published: findPublished(doc, jsonLd),
     author: findAuthor(doc, jsonLd),
     language: findLanguage(doc),
-    sourceUrl: cleanSourceUrl(url),
+    sourceUrl: cleanSourceUrl(sourceUrl),
   };
 }
 
