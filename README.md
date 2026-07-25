@@ -34,7 +34,7 @@ Body converted to Markdown...
 > caption: Figure 1 — overview
 ```
 
-Files are named `YYYY-MM-DD_Page Title.md` (clip date; Windows-forbidden characters are converted to full-width equivalents).
+Files are named `YYYY-MM-DD_Page Title.md` (clip date; Windows-forbidden characters are converted to full-width equivalents; the basename is capped at 220 UTF-8 bytes for compatibility with Google Drive / ext4 / APFS name limits).
 
 ## Installation
 
@@ -83,11 +83,11 @@ Right-clicking the toolbar icon offers **デバッグ: DOMをHTML保存**, which
 
 ## Changelog
 
-### v0.2.1 — 2026-07-18
+### v0.2.2 — 2026-07-18
 
 #### Changed
 
-- Renumbered every release to major version 0 (former 1.0.0–1.2.0 are now 0.0.0–0.2.0); the road to a true initial release still looks long
+- Filename basename is now capped at 220 UTF-8 bytes (was 100 characters), staying under the 255-byte name limit of Google Drive, ext4 and APFS
 
 See [CHANGELOG.md](CHANGELOG.md) for full history.
 
@@ -129,7 +129,7 @@ Markdown化された本文…
 > caption: 図1 — 全体像
 ```
 
-ファイル名は `YYYY-MM-DD_ページタイトル.md`（日付はクリップ日。Windows 禁止文字は全角に置換されます）。
+ファイル名は `YYYY-MM-DD_ページタイトル.md`（日付はクリップ日。Windows 禁止文字は全角に置換され、ベースネームは Googleドライブ / ext4 / APFS の上限に収まるよう UTF-8 で220バイト以下に切り詰められます）。
 
 ## インストール
 
@@ -178,10 +178,10 @@ npm run build
 
 ## 更新履歴
 
-### v0.2.1 — 2026-07-18
+### v0.2.2 — 2026-07-18
 
 #### 変更
 
-- 真の初回リリースまでの道のりはまだ長そうだということで、MAJORバージョンを0に落として仕切り直し（旧 1.0.0〜1.2.0 は 0.0.0〜0.2.0 に）
+- ファイル名のベースネーム上限を「100文字」から「UTF-8で220バイト以下」に変更（Googleドライブ・ext4・APFSの255バイト上限対策）
 
 全履歴は [CHANGELOG.md](CHANGELOG.md) を参照。

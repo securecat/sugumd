@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [0.2.2] - 2026-07-18
+
+### Changed
+
+- Filename length limit is now byte-based: the basename (without `.md`) is capped at 220 UTF-8 bytes instead of 100 characters. A 100-character Japanese title is ~270 bytes and exceeds the 255-byte name limit of Google Drive, ext4 and APFS
+
 ## [0.2.1] - 2026-07-18
 
 ### Changed
@@ -61,6 +67,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ---
 
 # 更新履歴
+
+## [0.2.2] - 2026-07-18
+
+### 変更
+
+- ファイル名の長さ上限をバイト基準に変更：ベースネーム（`.md` を除く部分）を「100文字」から「UTF-8で220バイト以下」に。日本語100文字のタイトルは約270バイトになり、Googleドライブ・ext4・APFSの255バイト上限を超えてしまうため
 
 ## [0.2.1] - 2026-07-18
 

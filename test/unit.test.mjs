@@ -122,6 +122,15 @@ test("filename: forbidden chars to fullwidth", () => {
 test("filename: empty title fallback", () => {
   assert.equal(buildFilename("  ", "2026-07-12"), "2026-07-12_untitled.md");
 });
-test("filename: length capped", () => {
-  assert.ok(buildFilename("あ".repeat(300), "2026-07-12").length <= 100);
+test("filename: basename capped at 220 UTF-8 bytes", () => {
+  for (const title of ["あ".repeat(300), "a".repeat(300), "😀".repeat(120)]) {
+    const name = buildFilename(title, "2026-07-18");
+    const basename = name.replace(/\.md$/, "");
+    assert.ok(new TextEncoder().encode(basename).length <= 220, `over 220 bytes: ${title[0]}`);
+    assert.ok(name.endsWith(".md"));
+    assert.ok(!/[\uD800-\uDBFF](?![\uDC00-\uDFFF])/.test(name), "broken surrogate pair");
+  }
+});
+test("filename: short titles unaffected by byte cap", () => {
+  assert.equal(buildFilename("普通の記事タイトル", "2026-07-18"), "2026-07-18_普通の記事タイトル.md");
 });
